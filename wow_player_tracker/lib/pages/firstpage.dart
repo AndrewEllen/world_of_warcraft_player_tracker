@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:graphic/graphic.dart';
+
+import 'CharacterData/data.dart';
 
 
 class FirstPage extends StatefulWidget {
@@ -59,6 +62,44 @@ class _FirstPageState extends State<FirstPage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              width: 400,
+              height: 300,
+              child: Chart(
+                data: basicData,
+                variables: {
+                  'genre': Variable(
+                    accessor: (Map map) => map['genre'] as String,
+                  ),
+                  'sold': Variable(
+                    accessor: (Map map) => map['sold'] as num,
+                  ),
+                },
+                marks: [
+                  IntervalMark(
+                    label: LabelEncode(
+                        encoder: (tuple) => Label(tuple['sold'].toString())),
+                    elevation: ElevationEncode(value: 0, updaters: {
+                      'tap': {true: (_) => 75} // Color Bleed from bar
+                    }),
+                    color:
+                    ColorEncode(value: Defaults.primaryColor, updaters: {
+                      'tap': {false: (color) => color.withAlpha(100)}//On tap changes other bars
+                    }),
+                  )
+                ],
+                axes: [
+                  Defaults.horizontalAxis,
+                  Defaults.verticalAxis,
+                ],
+                selections: {'tap': PointSelection(dim: Dim.x)},
+                tooltip: TooltipGuide(),
+                crosshair: CrosshairGuide(),
+              ),
+            ),
+
             const Text(
               'You have pushed the button this many times:',
             ),
@@ -67,6 +108,8 @@ class _FirstPageState extends State<FirstPage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
+
+
         ),
       ),
       floatingActionButton: FloatingActionButton(
