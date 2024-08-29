@@ -63,6 +63,7 @@ class _FirstPageState extends State<FirstPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
 
+            //Graphc 1
             Container(
               margin: const EdgeInsets.only(top: 10),
               width: 400,
@@ -99,7 +100,46 @@ class _FirstPageState extends State<FirstPage> {
                 crosshair: CrosshairGuide(),
               ),
             ),
-
+            //Grahc 2
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
+              child: const Text(
+                'Rose Chart',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              width: 350,
+              height: 300,
+              child: Chart(
+                data: roseData,
+                variables: {
+                  'name': Variable(
+                    accessor: (Map map) => map['name'] as String,
+                  ),
+                  'value': Variable(
+                    accessor: (Map map) => map['value'] as num,
+                    scale: LinearScale(min: 0, marginMax: 0.1),
+                  ),
+                },
+                marks: [
+                  IntervalMark(
+                    label: LabelEncode(
+                        encoder: (tuple) => Label(tuple['name'].toString())),
+                    shape: ShapeEncode(
+                        value: RectShape(
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(0)),
+                        )),
+                    color: ColorEncode(
+                        variable: 'name', values: Defaults.colors10),
+                    elevation: ElevationEncode(value: 5),
+                  )
+                ],
+                coord: PolarCoord(startRadius: 0.1),
+              ),
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),

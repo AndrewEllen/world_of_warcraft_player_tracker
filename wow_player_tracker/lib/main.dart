@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wow_player_tracker/pages/blanktemplate.dart';
 import 'package:wow_player_tracker/pages/firstpage.dart';
 import 'package:wow_player_tracker/pages/secondpage.dart';
+import 'package:wow_player_tracker/pages/testpage.dart';
 import 'package:wow_player_tracker/providers/counterProvider.dart';
 
 void main() {
@@ -76,7 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     FirstPage(),
     SecondPage(),
-
+    Testpage(),
+    BlankTemplate(),
   ];
 
 
@@ -102,14 +105,23 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
 
       bottomNavigationBar: BottomNavigationBar(
-          items: [
+          items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-              label: "Home"
-            ),
-            BottomNavigationBarItem(
+              label: "Home",
+              backgroundColor: Colors.red,
+            ),BottomNavigationBarItem(
                 icon: Icon(Icons.local_post_office),
-              label: "Second Home"
+              label: "Second",
+              backgroundColor: Colors.green,
+            ),BottomNavigationBarItem(
+                icon: Icon(Icons.local_post_office),
+              label: "Test",
+              backgroundColor: Colors.cyan,
+            ),BottomNavigationBarItem(
+                icon: Icon(Icons.local_post_office),
+              label: "Test2",
+              backgroundColor: Colors.purple,
             ),
           ],
         currentIndex: _selectedIndex,
@@ -121,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         },
       ),
+
 
       body: pages[_selectedIndex],
     );
