@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:wow_player_tracker/providers/counterProvider.dart';
 import 'package:graphic/graphic.dart';
 
+import '../constants.dart';
+
+import '../Compentents/app_buttons.dart';
 
 import 'CharacterData/data.dart';
 
@@ -60,6 +63,7 @@ class _SecondPageState extends State<SecondPage> {
                 sliver: SliverList(
                   delegate: SliverChildListDelegate(
                     <Widget>[
+
                       Container(
                         padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
                         child: const Text(
@@ -87,9 +91,15 @@ class _SecondPageState extends State<SecondPage> {
                           ),
                           onPressed: () { },
                           child: const Text('TextButton')
-                      )
+                      ),
 
-
+                      
+                      AppButtons(textcolor: appPrimaryColour,
+                          backgroundColor: appTertiaryColour,
+                          borderColor: appSecondaryColour,
+                          text: "text",
+                          size: 50,
+                          ),
 
 
 

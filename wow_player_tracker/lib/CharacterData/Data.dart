@@ -6,3 +6,4 @@ const basicData = [
   {'genre': 'Other', 'sold': 150},
   {'genre': 'Jack', 'sold': 69},
 ];
+

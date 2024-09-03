@@ -1,19 +1,34 @@
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wow_player_tracker/pages/CharacterData/data.dart';
 import 'package:wow_player_tracker/pages/blanktemplate.dart';
 import 'package:wow_player_tracker/pages/firstpage.dart';
 import 'package:wow_player_tracker/pages/secondpage.dart';
 import 'package:wow_player_tracker/pages/testpage.dart';
+import 'package:wow_player_tracker/providers/chosenclassProvider.dart';
 import 'package:wow_player_tracker/providers/counterProvider.dart';
 
+const int classSelected = 0;
+
+late Timer timer;
+
+bool rebuild = false;
+
 void main() {
+
+
 
   runApp(
     MultiProvider(
         providers: [
+          ChangeNotifierProvider(create: (_) => ChosenClassProvider()),
           ChangeNotifierProvider(create: (context) => CounterProvider()),
         ],
       child: const MyApp(),
+
     ),
   );
 }
@@ -50,6 +65,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -63,6 +80,8 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+
+
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -102,7 +121,28 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
+
+
     return Scaffold(
+
+
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            rebuild = true; // Set the rebuild flag to true
+          });
+          // Optionally, update the selected class using the provider
+          context.read<ChosenClassProvider>().updateSelectedClass();
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+        elevation: 4.0,
+        backgroundColor: Colors.amber,
+      ),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
 
       bottomNavigationBar: BottomNavigationBar(
           items: const [
@@ -123,7 +163,9 @@ class _MyHomePageState extends State<MyHomePage> {
               label: "Test2",
               backgroundColor: Colors.purple,
             ),
+
           ],
+
         currentIndex: _selectedIndex,
         onTap: (index) => {
 

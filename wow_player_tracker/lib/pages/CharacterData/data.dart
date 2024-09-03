@@ -11,7 +11,7 @@ const basicData = [
   {'genre': 'DH', 'sold': 70},//Demon Hunter
   {'genre': 'DK', 'sold': 70},//Death Knight
   {'genre': 'E', 'sold': 70},//Evoker
-
+//12 classes
 ];//
 
 const roseData = [
@@ -30,3 +30,18 @@ const roseData = [
 
 
 ];// TODO Implement this library.
+
+
+const classlistData = [
+  {'genre': 'W', 'sold': 06}, //Warrior
+  {'genre': 'PAL', 'sold': 10},//Paladin
+  {'genre': 'H', 'sold': 10},//Hunter
+  {'genre': 'R', 'sold': 5},//Rogue
+  {'genre': 'PRI', 'sold': 5},//Priest
+  {'genre': 'S', 'sold': 7},//Shaman
+  {'genre': 'WL', 'sold': 5},//Warlock
+  {'genre': 'M', 'sold': 10},//Monk
+  {'genre': 'D', 'sold': 10},//Druid
+  {'genre': 'DH', 'sold': 7},//Demon Hunter
+
+];
