@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:wow_player_tracker/providers/chosenclassProvider.dart';
 import 'CharacterData/data.dart';
 
+import 'package:pretty_charts/pretty_charts.dart';
+
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
 
@@ -18,14 +20,13 @@ class _FirstPageState extends State<FirstPage> {
   bool rebuild = false;
 
   // List of names to filter by
-  final List<String> namesToShow = ['DH', 'PAL'];
+  //final List<String> namesToShow = ['DH', 'PAL'];
 
   // Filter data before passing to the chart
   List<Map<String, Object>> getFilteredData(List<Map<String, dynamic>>? data) {
     if (data == null) return []; // Handle potential null data
     return data
         .where((map) => map['genre'] != null && map['sold'] != null)
-        .where((map) => namesToShow.contains(map['genre']))
         .map((map) => {
       'genre': map['genre'] as String,
       'sold': map['sold'] as num,
@@ -54,9 +55,21 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     // Use ChosenClassProvider safely, ensuring it doesn't return null
-    final chosenClassData = context.watch<ChosenClassProvider>().chosenClass;
-    final filteredData1 = getFilteredData([if (chosenClassData != null) chosenClassData]);
-    final filteredData2 = getFilteredData([if (chosenClassData != null) chosenClassData]);
+    var filteredData1 = classlistData;
+    if(context.watch<ChosenClassProvider>().selectedClass <= classlistData.length -1) {
+      var chosenClassData = context
+          .watch<ChosenClassProvider>()
+          .chosenClass;
+     filteredData1 = getFilteredData(
+          [if (chosenClassData != null) chosenClassData]);
+      var filteredData2 = getFilteredData(
+          [if (chosenClassData != null) chosenClassData]);
+    }else if (context.watch<ChosenClassProvider>().selectedClass >= classlistData.length)
+    {
+      filteredData1 = classlistData;
+
+    }
+
 
     return Scaffold(
       appBar: AppBar(
@@ -67,6 +80,7 @@ class _FirstPageState extends State<FirstPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+
             // Graphic 1
             Container(
               margin: const EdgeInsets.only(top: 10),
@@ -103,6 +117,7 @@ class _FirstPageState extends State<FirstPage> {
                 crosshair: CrosshairGuide(),
               ),
             ),
+
             // Graphic 2
             Container(
               padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
@@ -151,15 +166,181 @@ class _FirstPageState extends State<FirstPage> {
               ),
             ),
             */
+
+            //
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
+              child: const Text(
+                'Custom Legend',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                '- Custom legend by mark and tag annotations.',
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                '- With dodge modifier.',
+              ),
+            ),
+            /*
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              width: 350,
+              height: 200,
+              child: Chart(
+                padding: (_) => const EdgeInsets.fromLTRB(40, 5, 10, 40),
+                data: adjustData,
+                variables: {
+                  'index': Variable(
+                    accessor: (Map map) => map['index'].toString(),
+                  ),
+                  'type': Variable(
+                    accessor: (Map map) => map['type'] as String,
+                  ),
+                  'value': Variable(
+                    accessor: (Map map) => map['value'] as num,
+                  ),
+                },
+                marks: [
+                  IntervalMark(
+                    position:
+                    Varset('index') * Varset('value') / Varset('type'),
+                    color: ColorEncode(
+                        variable: 'type', values: Defaults.colors10),
+                    size: SizeEncode(value: 2),
+                    modifiers: [DodgeModifier(ratio: 0.1)],
+                  )
+                ],
+                coord: RectCoord(
+                  horizontalRangeUpdater: Defaults.horizontalRangeEvent,
+                ),
+                axes: [
+                  Defaults.horizontalAxis..tickLine = TickLine(),
+                  Defaults.verticalAxis,
+                ],
+                selections: {
+                  'tap': PointSelection(
+                    variable: 'index',
+                  )
+                },
+                tooltip: TooltipGuide(multiTuples: true),
+                crosshair: CrosshairGuide(),
+                annotations: [
+                  CustomAnnotation(
+                      renderer: (_, size) => [
+                        CircleElement(
+                            center: const Offset(25, 290),
+                            radius: 5,
+                            style: PaintStyle(
+                                fillColor: Defaults.colors10[0]))
+                      ],
+                      anchor: (p0) => const Offset(0, 0)),
+                  TagAnnotation(
+                    label: Label(
+                      'Email',
+                      LabelStyle(
+                          textStyle: Defaults.textStyle,
+                          align: Alignment.centerRight),
+                    ),
+                    anchor: (size) => const Offset(34, 290),
+                  ),
+                  CustomAnnotation(
+                      renderer: (_, size) => [
+                        CircleElement(
+                            center: Offset(25 + size.width / 5, 290),
+                            radius: 5,
+                            style: PaintStyle(
+                                fillColor: Defaults.colors10[1]))
+                      ],
+                      anchor: (p0) => const Offset(0, 0)),
+                  TagAnnotation(
+                    label: Label(
+                      'Affiliate',
+                      LabelStyle(
+                          textStyle: Defaults.textStyle,
+                          align: Alignment.centerRight),
+                    ),
+                    anchor: (size) => Offset(34 + size.width / 5, 290),
+                  ),
+                  CustomAnnotation(
+                      renderer: (_, size) => [
+                        CircleElement(
+                            center: Offset(25 + size.width / 5 * 2, 290),
+                            radius: 5,
+                            style: PaintStyle(
+                                fillColor: Defaults.colors10[2]))
+                      ],
+                      anchor: (p0) => const Offset(0, 0)),
+                  TagAnnotation(
+                    label: Label(
+                      'Video',
+                      LabelStyle(
+                          textStyle: Defaults.textStyle,
+                          align: Alignment.centerRight),
+                    ),
+                    anchor: (size) => Offset(34 + size.width / 5 * 2, 290),
+                  ),
+                  CustomAnnotation(
+                      renderer: (_, size) => [
+                        CircleElement(
+                            center: Offset(25 + size.width / 5 * 3, 290),
+                            radius: 5,
+                            style: PaintStyle(
+                                fillColor: Defaults.colors10[3]))
+                      ],
+                      anchor: (p0) => const Offset(0, 0)),
+                  TagAnnotation(
+                    label: Label(
+                      'Direct',
+                      LabelStyle(
+                          textStyle: Defaults.textStyle,
+                          align: Alignment.centerRight),
+                    ),
+                    anchor: (size) => Offset(34 + size.width / 5 * 3, 290),
+                  ),
+                  CustomAnnotation(
+                      renderer: (_, size) => [
+                        CircleElement(
+                            center: Offset(25 + size.width / 5 * 4, 290),
+                            radius: 5,
+                            style: PaintStyle(
+                                fillColor: Defaults.colors10[4]))
+                      ],
+                      anchor: (p0) => const Offset(0, 0)),
+                  TagAnnotation(
+                    label: Label(
+                      'Search',
+                      LabelStyle(
+                          textStyle: Defaults.textStyle,
+                          align: Alignment.centerRight),
+                    ),
+                    anchor: (size) => Offset(34 + size.width / 5 * 4, 290),
+                  ),
+                ],
+              ),
+            ),
+*/
+
+
+
           ],
         ),
       ),
+
+      /*
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           context.read<ChosenClassProvider>().updateSelectedClass();
         },
         child: const Icon(Icons.add),
-      ),
+      ), */
     );
   }
 }
