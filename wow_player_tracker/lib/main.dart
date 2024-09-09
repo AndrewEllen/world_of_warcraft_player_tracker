@@ -11,20 +11,29 @@ import 'package:wow_player_tracker/pages/firstpage.dart';
 import 'package:wow_player_tracker/pages/secondpage.dart';
 import 'package:wow_player_tracker/pages/testpage.dart';
 import 'package:wow_player_tracker/providers/chosenclassProvider.dart';
+
 import 'package:wow_player_tracker/providers/counterProvider.dart';
 
+
+
+//consistent veriables
 const int classSelected = 0;
 
 late Timer timer;
 
 bool rebuild = false;
 
+
+
+
+//the main app starter
 void main() {
   runApp(
     MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => ChosenClassProvider()),
           ChangeNotifierProvider(create: (context) => CounterProvider()),
+
         ],
       child: const MyApp(),
 
@@ -35,7 +44,7 @@ void main() {
 
 
 
-
+//the base app start up app method
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -69,7 +78,7 @@ class MyApp extends StatelessWidget {
 }
 
 
-
+//home page title state
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   // This widget is the home page of your application. It is stateful, meaning
@@ -85,6 +94,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+//the State Manager
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   int _selectedIndex = 0;
@@ -95,16 +105,9 @@ class _MyHomePageState extends State<MyHomePage> {
     Testpage(),
     BlankTemplate(),
   ];
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+
+
+  // Navigation Builder
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -113,7 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-
     return Scaffold(
       floatingActionButton: ExpandableFab(
         distance: 150,
@@ -307,12 +309,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: pages[_selectedIndex],
     );
-
-
   }
-
 }
 
+//Class Button Starter
 @immutable
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
@@ -330,16 +330,18 @@ class ExpandableFab extends StatefulWidget {
   State<ExpandableFab> createState() => _ExpandableFabState();
 }
 
+//Opening button maker
 class _ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _expandAnimation;
+
   bool _open = false;
 
   @override
   void initState() {
     super.initState();
-    _open = widget.initialOpen ?? false;
+    _open ?? false;
     _controller = AnimationController(
       value: _open ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 250),
@@ -458,6 +460,7 @@ class _ExpandableFabState extends State<ExpandableFab>
   }
 }
 
+//Child Class button maker
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
   const _ExpandingActionButton({
@@ -499,7 +502,9 @@ class _ExpandingActionButton extends StatelessWidget {
 }
 
 
+
 //This is where i can add little details
+//action button are the Class buttons
 @immutable
 class ActionButton extends StatelessWidget {
   const ActionButton({
