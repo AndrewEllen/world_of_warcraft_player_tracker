@@ -82,6 +82,7 @@ class _FirstPageState extends State<FirstPage> {
           children: <Widget>[
 
             // Graphic 1
+
             Container(
               margin: const EdgeInsets.only(top: 10),
               width: 400,
@@ -128,45 +129,48 @@ class _FirstPageState extends State<FirstPage> {
             ),
             const Text(""),
             // Graphic 3 (if needed)
+
             /*
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              width: 300,
-              height: 300,
-              child: Chart(
-                data: filteredData2, // Use filtered data here
-                variables: {
-                  'genre': Variable(
-                    accessor: (Map<String, Object> map) => map['genre'] as String,
-                  ),
-                  'sold': Variable(
-                    accessor: (Map<String, Object> map) => map['sold'] as num,
-                    scale: LinearScale(min: 0, marginMax: 0.1),
-                  ),
-                },
-                marks: [
-                  IntervalMark(
-                    label: LabelEncode(
-                        encoder: (tuple) => Label(tuple['genre'].toString())),
-                    shape: ShapeEncode(
-                        value: RectShape(
-                          borderRadius:
-                          const BorderRadius.all(Radius.circular(10)),
-                        )),
-                    color: ColorEncode(
-                        variable: 'genre', values: Defaults.colors10),
-                    elevation: ElevationEncode(value: 5),
-                    transition: Transition(
-                        duration: const Duration(seconds: 2),
-                        curve: Curves.elasticOut),
-                    entrance: {MarkEntrance.y},
-                  )
-                ],
-                coord: PolarCoord(startRadius: 0.15),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(top: 10),
+                width: 400,
+                height: 200,
+                child: Chart(
+                  data: basicData, // Use filtered data here
+                  variables: {
+                    'genre': Variable(
+                      accessor: (Map<String, Object> map) => map['genre'] as String,
+                    ),
+                    'sold': Variable(
+                      accessor: (Map<String, Object> map) => map['sold'] as num,
+                      scale: LinearScale(min: 0, marginMax: 0.1),
+                    ),
+                  },
+                  marks: [
+                    IntervalMark(
+                      label: LabelEncode(
+                          encoder: (tuple) => Label(tuple['genre'].toString())),
+                      shape: ShapeEncode(
+                          value: RectShape(
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(7)),
+                          )),
+                      color: ColorEncode(
+                          variable: 'genre', values: Defaults.colors10),
+                      elevation: ElevationEncode(value: 2),
+                      transition: Transition(
+                          duration: const Duration(seconds: 2),
+                          curve: Curves.elasticOut),
+                      entrance: {MarkEntrance.y},
+                    )
+                  ],
+                  coord: PolarCoord(startRadius: 0.15),
+                ),
               ),
             ),
-            */
 
+*/
             //
             Container(
               padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),

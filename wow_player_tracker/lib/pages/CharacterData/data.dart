@@ -9,8 +9,8 @@ const basicData = [
   {'genre': 'M', 'sold': 150},//Monk
   {'genre': 'D', 'sold': 150},//Druid
   {'genre': 'DH', 'sold': 70},//Demon Hunter
-  {'genre': 'DK', 'sold': 70},//Death Knight
-  {'genre': 'E', 'sold': 70},//Evoker
+ //{'genre': 'DK', 'sold': 70},//Death Knight
+ // {'genre': 'E', 'sold': 70},//Evoker
 //12 classes
 ];//
 

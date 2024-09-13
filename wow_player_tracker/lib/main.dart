@@ -14,6 +14,8 @@ import 'package:wow_player_tracker/providers/chosenclassProvider.dart';
 
 import 'package:wow_player_tracker/providers/counterProvider.dart';
 
+import 'Compentents/statemanageController.dart';
+
 
 
 //consistent veriables
@@ -33,7 +35,7 @@ void main() {
         providers: [
           ChangeNotifierProvider(create: (_) => ChosenClassProvider()),
           ChangeNotifierProvider(create: (context) => CounterProvider()),
-
+          ChangeNotifierProvider(create: (context) => StateManageController()),
         ],
       child: const MyApp(),
 
@@ -95,7 +97,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 //the State Manager
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>{
   int _counter = 0;
   int _selectedIndex = 0;
   List<Widget> pages = [
@@ -105,6 +107,13 @@ class _MyHomePageState extends State<MyHomePage> {
     Testpage(),
     BlankTemplate(),
   ];
+
+
+
+
+
+
+
 
 
   // Navigation Builder
@@ -118,6 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       floatingActionButton: ExpandableFab(
+
         distance: 150,
         children: [
           ActionButton(
@@ -129,6 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
               });
               // Optionally, update the selected class using the provider
               context.read<ChosenClassProvider>().updateSelectedClass(0);
+              context.read<StateManageController>().setOpenState();
 
             },
             icon: Image.asset('WCIcons/Class_Warrior_Icon.png'),
@@ -143,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
               });
               // Optionally, update the selected class using the provider
               context.read<ChosenClassProvider>().updateSelectedClass(1);
-
+              context.read<StateManageController>().setOpenState();
             },
             icon: Image.asset('WCIcons/Class_Paladin_Icon.png'),
           ),
@@ -315,12 +326,13 @@ class _MyHomePageState extends State<MyHomePage> {
 //Class Button Starter
 @immutable
 class ExpandableFab extends StatefulWidget {
-  const ExpandableFab({
+  ExpandableFab({
     super.key,
     this.initialOpen,
     required this.distance,
     required this.children,
   });
+
 
   final bool? initialOpen;
   final double distance;
@@ -333,47 +345,60 @@ class ExpandableFab extends StatefulWidget {
 //Opening button maker
 class _ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
   late final Animation<double> _expandAnimation;
+  late AnimationController controller;
 
-  bool _open = false;
 
   @override
   void initState() {
     super.initState();
-    _open ?? false;
-    _controller = AnimationController(
-      value: _open ? 1.0 : 0.0,
+    context.read<StateManageController>().open ?? false;
+
+    controller = AnimationController(
+      value: context.read<StateManageController>().open ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 250),
       vsync: this,
     );
+
     _expandAnimation = CurvedAnimation(
       curve: Curves.fastOutSlowIn,
       reverseCurve: Curves.easeOutQuad,
-      parent: _controller,
+      parent:  controller,
     );
+
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
   void _toggle() {
+
+    context.read<StateManageController>().setOpenState();
     setState(() {
-      _open = !_open;
-      if (_open) {
-        _controller.forward();
+
+      if (context.read<StateManageController>().open) {
+        controller.forward();
       } else {
-        _controller.reverse();
+        controller.reverse();
       }
+
     });
   }
 
 
   @override
   Widget build(BuildContext context) {
+    context.watch<StateManageController>().open;
+
+    if(!context.read<StateManageController>().open){
+
+      controller.reverse();
+
+    }
+
     return SizedBox.expand(
       child: Stack(
         //aligment controles where it is
@@ -433,21 +458,21 @@ class _ExpandableFabState extends State<ExpandableFab>
     }
     return children;
   }
-
+// the main open and close widget
   Widget _buildTapToOpenFab() {
     return IgnorePointer(
-      ignoring: _open,
+      ignoring: context.read<StateManageController>().open,
       child: AnimatedContainer(
         transformAlignment: Alignment.bottomCenter,
         transform: Matrix4.diagonal3Values(
-          _open ? 0.7 : 1.0,
-          _open ? 0.7 : 1.0,
+          context.read<StateManageController>().open ? 0.7 : 1.0,
+          context.read<StateManageController>().open ? 0.7 : 1.0,
           1.0,
         ),
         duration: const Duration(milliseconds: 250),
         curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
         child: AnimatedOpacity(
-          opacity: _open ? 0.0 : 1.0,
+          opacity: context.read<StateManageController>().open ? 0.0 : 1.0,
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
@@ -477,6 +502,7 @@ class _ExpandingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<StateManageController>().open;
     return AnimatedBuilder(
       animation: progress,
       builder: (context, child) {
