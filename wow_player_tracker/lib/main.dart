@@ -14,8 +14,11 @@ import 'package:wow_player_tracker/providers/chosenclassProvider.dart';
 
 import 'package:wow_player_tracker/providers/counterProvider.dart';
 
+import 'Compentents/actionbutton.dart';
+import 'Compentents/expandablefab.dart';
 import 'Compentents/statemanageController.dart';
-
+import 'Components/expandingactionbutton.dart';
+import 'constants.dart';
 
 
 //consistent veriables
@@ -109,13 +112,6 @@ class _MyHomePageState extends State<MyHomePage>{
   ];
 
 
-
-
-
-
-
-
-
   // Navigation Builder
   @override
   Widget build(BuildContext context) {
@@ -126,6 +122,72 @@ class _MyHomePageState extends State<MyHomePage>{
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+
+appBar: AppBar(
+  title: const Text("WoW Guild App"),
+),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Guild Menu',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Manage your guild data',
+                    style: TextStyle(
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.dashboard),
+              title: Text('Raid Progress'),
+              onTap: () {
+                // Navigate to Raid Progress page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.people),
+              title: Text('Guild Roster'),
+              onTap: () {
+                // Navigate to Guild Roster page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.analytics),
+              title: Text('Mythic Progress'),
+              onTap: () {
+                // Navigate to Mythic Progress page
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () {
+                // Navigate to Settings page
+              },
+            ),
+          ],
+        ),
+      ),
+
+
+
       floatingActionButton: ExpandableFab(
 
         distance: 150,
@@ -284,6 +346,7 @@ class _MyHomePageState extends State<MyHomePage>{
           ),
         ],
       ),
+
      // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       bottomNavigationBar: BottomNavigationBar(
           items: const [
@@ -318,243 +381,12 @@ class _MyHomePageState extends State<MyHomePage>{
 
         },
       ),
+
       body: pages[_selectedIndex],
     );
   }
 }
 
-//Class Button Starter
-@immutable
-class ExpandableFab extends StatefulWidget {
-  ExpandableFab({
-    super.key,
-    this.initialOpen,
-    required this.distance,
-    required this.children,
-  });
-
-
-  final bool? initialOpen;
-  final double distance;
-  final List<Widget> children;
-
-  @override
-  State<ExpandableFab> createState() => _ExpandableFabState();
-}
-
-//Opening button maker
-class _ExpandableFabState extends State<ExpandableFab>
-    with SingleTickerProviderStateMixin {
-  late final Animation<double> _expandAnimation;
-  late AnimationController controller;
-
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<StateManageController>().open ?? false;
-
-    controller = AnimationController(
-      value: context.read<StateManageController>().open ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 250),
-      vsync: this,
-    );
-
-    _expandAnimation = CurvedAnimation(
-      curve: Curves.fastOutSlowIn,
-      reverseCurve: Curves.easeOutQuad,
-      parent:  controller,
-    );
-
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void _toggle() {
-
-    context.read<StateManageController>().setOpenState();
-    setState(() {
-
-      if (context.read<StateManageController>().open) {
-        controller.forward();
-      } else {
-        controller.reverse();
-      }
-
-    });
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    context.watch<StateManageController>().open;
-
-    if(!context.read<StateManageController>().open){
-
-      controller.reverse();
-
-    }
-
-    return SizedBox.expand(
-      child: Stack(
-        //aligment controles where it is
-        alignment: Alignment.bottomCenter,
-        clipBehavior: Clip.none,
-        children: [
-         _buildTapToCloseFab(),
-          ..._buildExpandingActionButtons(),
-          _buildTapToOpenFab(),
-        ],
-      ),
-    );
-  }
-
-
-  Widget _buildTapToCloseFab() {
-    return SizedBox(
-      width: 56,
-      height: 56,
-      child: Center(
-        child: Material(
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          elevation: 4,
-          child: InkWell(
-            onTap: _toggle,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Icon(
-                Icons.close,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-
-  //this handles the little bittons
-  List<Widget> _buildExpandingActionButtons() {
-    final children = <Widget>[];
-    final count = widget.children.length;
-    final step = 140.0 / (count);
-    for (var i = 0, angleInDegrees =1.0;
-    i < count;
-    i++, angleInDegrees += step) {
-      children.add(
-        _ExpandingActionButton(
-          directionInDegrees: angleInDegrees,
-          maxDistance: widget.distance,
-          progress: _expandAnimation,
-          child: widget.children[i],
-        ),
-      );
-    }
-    return children;
-  }
-// the main open and close widget
-  Widget _buildTapToOpenFab() {
-    return IgnorePointer(
-      ignoring: context.read<StateManageController>().open,
-      child: AnimatedContainer(
-        transformAlignment: Alignment.bottomCenter,
-        transform: Matrix4.diagonal3Values(
-          context.read<StateManageController>().open ? 0.7 : 1.0,
-          context.read<StateManageController>().open ? 0.7 : 1.0,
-          1.0,
-        ),
-        duration: const Duration(milliseconds: 250),
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
-        child: AnimatedOpacity(
-          opacity: context.read<StateManageController>().open ? 0.0 : 1.0,
-          curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
-          duration: const Duration(milliseconds: 250),
-          child: FloatingActionButton(
-            onPressed: _toggle,
-            child: const Icon(Icons.create),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-//Child Class button maker
-@immutable
-class _ExpandingActionButton extends StatelessWidget {
-  const _ExpandingActionButton({
-    required this.directionInDegrees,
-    required this.maxDistance,
-    required this.progress,
-    required this.child,
-  });
-
-  final double directionInDegrees;
-  final double maxDistance;
-  final Animation<double> progress;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    context.watch<StateManageController>().open;
-    return AnimatedBuilder(
-      animation: progress,
-      builder: (context, child) {
-        final offset = Offset.fromDirection(
-          directionInDegrees * (math.pi / 2.0),
-          progress.value * maxDistance,
-
-        );
-        return Positioned(
-          right: 175.0 + offset.dx,
-          bottom: 450 + offset.dy,
-          child: Row(
-            children: [child!],
-          ),
-        );
-      },
-      child: FadeTransition(
-        opacity: progress,
-        child: child,
-      ),
-    );
-  }
-}
 
 
 
-//This is where i can add little details
-//action button are the Class buttons
-@immutable
-class ActionButton extends StatelessWidget {
-  const ActionButton({
-    super.key,
-    this.onPressed,
-    required this.icon,
-  });
-
-  final VoidCallback? onPressed;
-  final Widget icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Material(
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      color: Colors.transparent,
-      elevation: 4,
-      child: IconButton(
-        onPressed: onPressed,
-        icon : icon,
-        color: Colors.transparent,
-      ),
-    );
-  }
-}
