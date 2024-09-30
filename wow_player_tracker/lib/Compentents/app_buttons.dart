@@ -8,12 +8,12 @@ class AppButtons extends StatelessWidget{
   double size;
 
 
-  AppButtons({Key? key,
+  AppButtons({super.key,
     required this.textcolor,
     required this.backgroundColor,
     required this.borderColor,
     required this.text,
-    required this.size,}) : super (key: key);
+    required this.size,});
 
   @override
   Widget build(BuildContext context){

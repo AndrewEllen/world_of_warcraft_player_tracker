@@ -41,7 +41,7 @@ class _testpageState extends State<Testpage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("First Page"),
+        title: const Text("First Page"),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -90,7 +90,7 @@ class _testpageState extends State<Testpage> {
                       encoder: (tuple) => Label(
                         tuple['sold'].toString(),
                         LabelStyle(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                             fontSize: 20,  // Increase font size here
                             color: Colors.black,  // Optional: Adjust text color
                           ),

@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:graphic/graphic.dart';
 import 'package:provider/provider.dart';
-import 'package:wow_player_tracker/providers/chosenclassProvider.dart';
-import 'CharacterData/data.dart';
+import 'package:wow_player_tracker/providers/chosen_class_Provider.dart';
 
-import 'package:pretty_charts/pretty_charts.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
@@ -22,17 +18,7 @@ class _FirstPageState extends State<FirstPage> {
   // List of names to filter by
   //final List<String> namesToShow = ['DH', 'PAL'];
 
-  // Filter data before passing to the chart
-  List<Map<String, Object>> getFilteredData(List<Map<String, dynamic>>? data) {
-    if (data == null) return []; // Handle potential null data
-    return data
-        .where((map) => map['genre'] != null && map['sold'] != null)
-        .map((map) => {
-      'genre': map['genre'] as String,
-      'sold': map['sold'] as num,
-    })
-        .toList();
-  }
+
 
   @override
   void initState() {
@@ -55,20 +41,7 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     // Use ChosenClassProvider safely, ensuring it doesn't return null
-    var filteredData1 = classlistData;
-    if(context.watch<ChosenClassProvider>().selectedClass <= classlistData.length -1) {
-      var chosenClassData = context
-          .watch<ChosenClassProvider>()
-          .chosenClass;
-     filteredData1 = getFilteredData(
-          [if (chosenClassData != null) chosenClassData]);
-      var filteredData2 = getFilteredData(
-          [if (chosenClassData != null) chosenClassData]);
-    }else if (context.watch<ChosenClassProvider>().selectedClass >= classlistData.length)
-    {
-      filteredData1 = classlistData;
 
-    }
 
 
     return Scaffold(
@@ -84,39 +57,7 @@ class _FirstPageState extends State<FirstPage> {
             // Graphic 1
 
             Container(
-              margin: const EdgeInsets.only(top: 10),
-              width: 400,
-              height: 300,
-              child: Chart(
-                data: filteredData1, // Use filtered data here
-                variables: {
-                  'genre': Variable(
-                    accessor: (Map<String, Object> map) => map['genre'] as String,
-                  ),
-                  'sold': Variable(
-                    accessor: (Map<String, Object> map) => map['sold'] as num,
-                  ),
-                },
-                marks: [
-                  IntervalMark(
-                    label: LabelEncode(
-                        encoder: (tuple) => Label(tuple['sold'].toString())),
-                    elevation: ElevationEncode(value: 0, updaters: {
-                      'tap': {true: (_) => 75} // Color Bleed from bar
-                    }),
-                    color: ColorEncode(value: Defaults.primaryColor, updaters: {
-                      'tap': {false: (color) => color.withAlpha(100)} // On tap changes other bars
-                    }),
-                  )
-                ],
-                axes: [
-                  Defaults.horizontalAxis,
-                  Defaults.verticalAxis,
-                ],
-                selections: {'tap': PointSelection(dim: Dim.x)},
-                tooltip: TooltipGuide(),
-                crosshair: CrosshairGuide(),
-              ),
+
             ),
 
             // Graphic 2

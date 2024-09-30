@@ -3,7 +3,7 @@ import 'package:wow_player_tracker/pages/CharacterData/data.dart';
 
 class ChosenClassProvider with ChangeNotifier {
   int _selectedClass = 0;
-  int _maxClasses = classlistData.length ; // Adjust based on actual data length
+  final int _maxClasses = classlistData.length ; // Adjust based on actual data length
 
   int get selectedClass => _selectedClass;
 

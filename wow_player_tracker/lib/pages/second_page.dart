@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wow_player_tracker/providers/counterProvider.dart';
-import 'package:graphic/graphic.dart';
 
 import '../constants.dart';
 
 import '../Compentents/app_buttons.dart';
 
-import 'CharacterData/data.dart';
 
 class SecondPage extends StatefulWidget {
   const SecondPage({super.key});
@@ -28,7 +24,7 @@ class _SecondPageState extends State<SecondPage> {
             .of(context)
             .colorScheme
             .inversePrimary,
-        title: Text("Scrolling"),
+        title: const Text("Scrolling"),
       ),
       body: _scroll(context),
     );

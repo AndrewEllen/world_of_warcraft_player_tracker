@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wow_player_tracker/providers/counterProvider.dart';
+import 'package:wow_player_tracker/providers/counter_Provider.dart';
 
 
 class BlankTemplate extends StatefulWidget {
@@ -28,7 +28,7 @@ class _BlankTemplateState extends State<BlankTemplate> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("Template"),
+        title: const Text("Template"),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
